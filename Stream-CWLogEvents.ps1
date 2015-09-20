@@ -1,10 +1,9 @@
-﻿
-<#
+﻿<#
 .SYNOPSIS
 Invokes the PutLogEvents operation. Unlike the standard Write-CWLogEvents, Stream-CWLogEvents accepts a string and will manage the SequenceToken for you.
 
 .DESCRIPTION
-Uploads events to CloudWatch logs. There no need to manage the sequence token.  This CmdLet will look up the SequenceToken before publishing. Events are of type string and will be truncated if longer than 4K characters.  You can send indiviual events or pipe data to create a series of events.  Events will be uploaded in batches of 100 events. You cannot specify a timestamp for events, it always uses the current date and time.  
+Uploads events to CloudWatch logs. There no need to manage the sequence token.  This CmdLet will look up the SequenceToken before publishing. Events are of type string and will be truncated if longer than 4K characters.  You can send individual events or pipe data to create a series of events.  Events will be uploaded in batches of 100 events. You cannot specify a timestamp for events, it always uses the current date and time.  
 
 .PARAMETER LogEvent
 A string or array of strings that will become CloudWatch Log Events.
@@ -32,7 +31,7 @@ Stream-CWLogEvents -LogGroupName MyGroupName -LogStreamName MyStreamName -Event 
 Uploads a batch of two events.
 .EXAMPLE
 Get-Content .\SomeFile.txt | Stream-CWLogEvents -LogGroupName MyGroupName -LogStreamName MyStreamName
-Upolads the the content recieved from the pipeline in batches of 100 events.  
+Uploads the the content received from the pipeline in batches of 100 events.  
 #>
 Function Stream-CWLogEvents {
     [CmdletBinding()]

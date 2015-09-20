@@ -106,8 +106,8 @@ namespace BrianBeach
         public string StreamName { get; private set; }
 
         /// <summary>
-        /// If FailOnError is true the trace listner will throw an error on failure.
-        /// The default behavior is ignore errors.  The assumumption is that it is beter
+        /// If FailOnError is true the trace listener will throw an error on failure.
+        /// The default behaviour is ignore errors.  The assumption is that it is better
         /// to keep running even if we cannot connect to the SloudWatch logs service.
         /// If you depend on the logs for auditing then set this property to true, but
         /// keep in mind that a connectivity issue will cause the entire application to fail.
@@ -120,7 +120,7 @@ namespace BrianBeach
 
         /// <summary>
         /// Constructs an CloudWatchLogsTraceListener object.
-        /// Assumes the groupname, streamName, region, accessKey and secretKey will be read from the app.config file or use default credentials.
+        /// Assumes the groupName, streamName, region, accessKey and secretKey will be read from the app.config file or use default credentials.
         /// </summary>
         /// <param name="groupName">Optional. CloudWatch Logs group name.</param>
         /// <param name="streamName">Optional. CloudWatch Logs group name.</param>
@@ -172,7 +172,7 @@ namespace BrianBeach
 
         /// <summary>
         /// Constructs an CloudWatchLogsTraceListener object with groupName, streamName, region, accessKey, secretKey, and failOnError.
-        /// You can leave any parameter null.  If null the vaule will be read from the app.config file or use default credentials.
+        /// You can leave any parameter null.  If null the value will be read from the app.config file or use default credentials.
         /// </summary>
         /// <param name="groupName">Optional. CloudWatch Logs group name.</param>
         /// <param name="streamName">Optional. CloudWatch Logs group name.</param>
@@ -250,7 +250,7 @@ namespace BrianBeach
         /// <summary>
         /// Writes a message to CloudWatchLogs.  Calls to Write() will be buffered until you call 
         /// WriteLine().  Each call to WriteLine() will result in a CloudWatchLogs event.  
-        /// If you call flush() before calling WriteLine() the event will inlude a partial line.
+        /// If you call flush() before calling WriteLine() the event will include a partial line.
         /// </summary>
         /// <param name="message">The message to write.</param>
         public override void Write(string message)
@@ -299,11 +299,11 @@ namespace BrianBeach
         }
 
         /// <summary>
-        /// This tracelistner will queue events and publish either every 15 seconds 
+        /// This TraceListener will queue events and publish either every 15 seconds 
         /// or when the number of events in the queue exceeds 100 to minimize network traffic. 
         /// Calling Flush() will publish the queu.  If you have called Write() without 
-        /// calling WriteLine() then an explicit call to Flush() will break the line accross 
-        /// two events.  Note that you must call Flush() on shutdown to ensure tha the last
+        /// calling WriteLine() then an explicit call to Flush() will break the line across 
+        /// two events.  Note that you must call Flush() on shutdown to ensure that the last
         /// few events are uploaded to CloudWatch Logs before exiting.
         /// </summary>
         public override void Flush()
@@ -322,8 +322,8 @@ namespace BrianBeach
             //If we were unable to connect then bail out
             if (_ConnectionFailed) return;
 
-            //Typicaly Publish will be called by the PublisherThread, but it can be called explicitly 
-            //with a Fulsh. If two threads publish at the same time the Token will get out of sync.
+            //Typically Publish will be called by the PublisherThread, but it can be called explicitly 
+            //with a Flush. If two threads publish at the same time the Token will get out of sync.
             //Therefore let's lock this section to be sure we only publish one batch at a time.
             lock (_EventQueue)
             {
@@ -381,12 +381,12 @@ namespace BrianBeach
         }
 
         /// <summary>
-        /// This is the background thread that periodicly flushed the queue.
+        /// This is the background thread that periodically flushed the queue.
         /// </summary>
         private void PublisherThread(){
             while (true)
             {
-                //Wait until it's time to publishs.  This occurs when the timer runs out or
+                //Wait until it's time to publish. This occurs when the timer runs out or
                 //the main threads signals us because there are too many events in the queue.
                 _EventsAvailable.WaitOne(MAX_TIME_BETWEEN_PUBLISH);
                 Publish();
